@@ -93,6 +93,11 @@ public class CameraController
         mBurstOn = false;
     }
 
+    public void cancelAutoFocus()
+    {
+        mCamera.cancelAutoFocus();
+    }
+
     public static interface OnControllerListener
     {
 
