@@ -25,6 +25,8 @@ public class CameraController
 
     private boolean mAllowAutoFocus = true;
 
+    private boolean mTakingPhoto = false;
+
     public void startExposureLock()
     {
         Camera.Parameters parameters = getParameters();
@@ -198,6 +200,7 @@ public class CameraController
         {
             mCamera.startPreview();
             mStarted = true;
+            mTakingPhoto = false;
         }
     }
 
@@ -222,9 +225,11 @@ public class CameraController
 
     public void takePhoto()
     {
-
         mAllowAutoFocus = false;
-        mCamera.takePicture(null, null, null, mSaveCallback);
+        if (!mTakingPhoto)
+        {
+            mCamera.takePicture(null, null, null, mSaveCallback);
+        }
     }
 
 
@@ -325,6 +330,7 @@ public class CameraController
         public void onPictureTaken(byte[] data, Camera camera)
         {
             mAllowAutoFocus = true;
+
             if (mOnControllerListener != null)
             {
                 mOnControllerListener.onPictureTaken(data);
