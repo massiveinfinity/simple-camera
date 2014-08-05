@@ -23,6 +23,8 @@ public class CameraController
 
     private boolean mBurstOn;
 
+    private boolean mAllowAutoFocus = true;
+
     public void startExposureLock()
     {
         Camera.Parameters parameters = getParameters();
@@ -59,7 +61,7 @@ public class CameraController
 //        parameters.setAutoExposureLock(false);
 //
 //        setParameters(parameters);
-        if (mStarted)
+        if (mStarted && mAllowAutoFocus)
         {
             mCamera.autoFocus(new Camera.AutoFocusCallback()
             {
@@ -220,6 +222,8 @@ public class CameraController
 
     public void takePhoto()
     {
+
+        mAllowAutoFocus = false;
         mCamera.takePicture(null, null, null, mSaveCallback);
     }
 
@@ -320,6 +324,7 @@ public class CameraController
         @Override
         public void onPictureTaken(byte[] data, Camera camera)
         {
+            mAllowAutoFocus = true;
             if (mOnControllerListener != null)
             {
                 mOnControllerListener.onPictureTaken(data);
