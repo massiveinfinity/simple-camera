@@ -21,6 +21,8 @@ public class CameraController
 
     private SaveCallback mSaveCallback;
 
+    private ShutterCallbackImpl mShutterCallback;
+
     private boolean mBurstOn;
 
     private boolean mAllowAutoFocus = true;
@@ -108,6 +110,8 @@ public class CameraController
         void onPictureTaken(byte[] data);
 
         void onFocus(boolean success);
+
+        void onShutter();
     }
 
     protected CameraHelpers.SelectedCamera mSelectedCamera;
@@ -134,6 +138,7 @@ public class CameraController
 
         mBurstCallback = new BurstCallback();
         mSaveCallback = new SaveCallback();
+        mShutterCallback = new ShutterCallbackImpl();
     }
 
     public void setOnControllerListener(OnControllerListener onControllerListener)
@@ -228,7 +233,7 @@ public class CameraController
         mAllowAutoFocus = false;
         if (!mTakingPhoto)
         {
-            mCamera.takePicture(null, null, null, mSaveCallback);
+            mCamera.takePicture(mShutterCallback, null, null, mSaveCallback);
         }
     }
 
@@ -321,6 +326,19 @@ public class CameraController
                     mCamera.takePicture(new BurstCallback(), null, null, new SaveCallback());
                 }
             }
+        }
+    }
+
+    private class ShutterCallbackImpl implements Camera.ShutterCallback {
+
+        @Override
+        public void onShutter()
+        {
+            if (mOnControllerListener != null)
+            {
+                mOnControllerListener.onShutter();
+            }
+
         }
     }
 
