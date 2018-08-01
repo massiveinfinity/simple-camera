@@ -16,7 +16,7 @@ android {
     }
     buildTypes {
         release {
-            runProguard Boolean.parseBoolean(project.RUN_PROGUARD)
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
